@@ -1,0 +1,6 @@
+.env 
+.github/
+
+api/.venv/
+api/traces/
+api/conf/secrets.yaml
