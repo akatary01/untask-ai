@@ -21,7 +21,6 @@ async def ask_gemini(prompt: str) -> str:
     site = Google()
     return await site.ask_gemini(prompt) or "No response received from Gemini."
     
-
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("__init__:api", host="127.0.0.1", port=8000, reload=True)
