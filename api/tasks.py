@@ -1,6 +1,7 @@
-from conf.celery_app import app
+from conf import app
+from tasks_schema import read_tasks
 
 @app.task
 def test():
-    print("test: its workingggg")
+    print(read_tasks())
     
