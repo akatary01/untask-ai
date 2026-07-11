@@ -6,3 +6,8 @@ api/traces/
 api/conf/secrets.yaml
 
 */__pycache__
+
+screenshot.png
+celerybeat-schedule 
+
+tasks.db
