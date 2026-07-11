@@ -12,17 +12,16 @@ class Task(Base):
     
     @staticmethod
     def write(task):
-        Base.metadata.create_all(db)
-
         with Session() as session:
             session.add(task)
             session.commit()
             
     @staticmethod
     def read():
-        Base.metadata.create_all(db)
         with Session() as session:
             return session.query(Task).all()
 
     def __repr__(self):
         return f"Task(prompt={self.prompt}, start_at={self.start_at}, frequency={self.frequency}, task_type={self.task_type})"
+target_tables = [Base.metadata.tables['tasks']]
+Base.metadata.create_all(db, tables=target_tables)
