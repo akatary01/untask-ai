@@ -4,3 +4,5 @@
 api/.venv/
 api/traces/
 api/conf/secrets.yaml
+
+*/__pycache__

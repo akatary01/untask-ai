@@ -33,14 +33,14 @@ class Google(BaseSite):
                 
                 await asyncio.sleep(60)  # Wait for response to generate
                 
-                divs = await page.get_elements_by_css_selector('div[data-complete="true"]')  
-                if len(divs) >= 3:
-                    text = await divs[2].evaluate("() => this.innerText")
-                    print(f"received response from Gemini: {text}")
+                page_text = await page.evaluate("() => document.body.innerText")
+                matches = re.search(r"AAnswer:(.*?)AEnd\.", page_text, re.DOTALL)
+                print(f"extracted Gemini answer: {"".join(match.strip() for match in matches.groups()) if matches else 'No match found'}")
+                response = matches.group(1).strip() if matches else None
+                print(f"received response from Gemini: {response}")
+                # if len(divs) >= 3:
+                #     text = await divs[2].evaluate("() => this.innerText")
                     
-                    matches = re.search(r"AAnswer:(.*?)AEnd\.", text, re.DOTALL)
-                    print(f"extracted Gemini answer: {matches.group(1).strip() if matches else 'No match found'}")
-                    response = matches.group(1).strip() if matches else None
         await self.stop()
         return response
         
