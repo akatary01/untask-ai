@@ -3,11 +3,10 @@
 
 api/.venv/
 api/traces/
+api/tasks.db
+api/screenshot.png
 api/conf/secrets.yaml
+api/celerybeat-schedule 
 
 */__pycache__
 
-screenshot.png
-celerybeat-schedule 
-
-tasks.db
