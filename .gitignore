@@ -6,7 +6,7 @@ api/traces/
 api/tasks.db
 api/screenshot.png
 api/conf/secrets.yaml
-api/celerybeat-schedule 
+api/celerybeat-schedule.db
 
-*/__pycache__
+*pycache*
 

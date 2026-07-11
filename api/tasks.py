@@ -1,7 +1,7 @@
 from conf import app
-from tasks_schema import read_tasks
+from db.task import Task
 
 @app.task
 def test():
-    print(read_tasks())
+    print(Task.read())
     
