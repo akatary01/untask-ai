@@ -20,6 +20,8 @@ api.add_middleware(
 async def ask_gemini(prompt: str) -> str:
     site = Google()
     return await site.ask_gemini(prompt) or "No response received from Gemini."
+
+# TODO: @Eemzz add a get method to create a task and store it in the database
     
 if __name__ == "__main__":
     import uvicorn
