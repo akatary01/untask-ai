@@ -20,6 +20,6 @@ app = Celery(
 app.conf.beat_schedule = {
     'orchestrator': {
         'task': 'tasks.orchestrator',
-        'schedule': timedelta(hour=3),  # runs every 3 hour
+        'schedule': timedelta(hours=3),  # runs every 3 hour
     }
 }  

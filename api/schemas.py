@@ -1,5 +1,5 @@
-from typing import List
 from pydantic import BaseModel
+from typing import List, Optional
 
 ## conf ##
 class Cors(BaseModel):
@@ -19,8 +19,9 @@ class Job(BaseModel):
     company_name: str
     job_title: str
     
-    link: str
     salary: str
     descritpion: str
     work_arrangement: str
     min_requirements: str
+    
+    link: Optional[str]

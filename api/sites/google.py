@@ -3,10 +3,12 @@ import json
 import asyncio
 from pathlib import Path
 from pydantic import BaseModel
+from typing import Optional, List, TypeVar
 
 from sites import BaseSite
 from browser_use import Browser
 
+T = TypeVar('T', bound=BaseModel)
 class Google(BaseSite):
     name = "Google"
     url = "https://google.com/aimode"
@@ -14,7 +16,7 @@ class Google(BaseSite):
     
     browser: Browser
 
-    async def ask_gemini(self, prompt: str) -> str:
+    async def ask_gemini(self, prompt: str) -> Optional[str]:
         har_path = Path("./traces/google.har")
         if har_path.exists():
             har_path.unlink()
@@ -40,8 +42,9 @@ class Google(BaseSite):
         await self.stop()
         return response
     
-    async def ask_gemini_json(self, prompt: str, output_format: BaseModel):
-        response = json.loads(await self.ask_gemini(prompt))
+    async def ask_gemini_json(self, prompt: str, output_format: type[T]) -> Optional[List[T]]:
+        response = await self.ask_gemini(prompt)
+        response = json.loads(response) if response else None
         if isinstance(response, list):
             for i in range(len(response)):
                 try:
@@ -52,7 +55,7 @@ class Google(BaseSite):
             print(f"Expected list, got: {response}")
         return response 
     
-    #TODO: Eman 
-    async def validate_job_link(link: str):
-        #navigate to link, check if its the actual job description page with apply button
-        return
+    # #TODO: Eman 
+    # async def validate_job_link(link: str):
+    #     #navigate to link, check if its the actual job description page with apply button
+    #     return
