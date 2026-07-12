@@ -23,7 +23,6 @@ api.add_middleware(
 async def ask_gemini(prompt: str) -> str:
     return await site.ask_gemini(prompt) or "No response received from Gemini."
 
-# TODO: @Eemzz add a post method to create a task and store it in the database
 @api.post("/create-task")
 def create_task(prompt: str, frequency: int, start_at: datetime, task_type: TaskType):
     Task.write(Task(prompt = prompt, start_at = start_at, frequency = frequency, task_type = task_type))

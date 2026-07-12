@@ -1,0 +1,10 @@
+Create a json file containing 
+only listings actively accepting applicants. Format it to include the following: 
+company name, 
+job title, 
+link to job description, pulled directly from official company applicant tracking pipelines, ensuring no third-party job aggregators are included (if cannot be found exclude job), 
+job location, 
+work arrangement (remote, hybrid, onsite), 
+salary range, 
+brief description of job, 
+list of minimum requirements for job.

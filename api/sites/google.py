@@ -1,8 +1,10 @@
 import re
+import json
 import asyncio
 from pathlib import Path
-from sites import BaseSite
+from pydantic import BaseModel
 
+from sites import BaseSite
 from browser_use import Browser
 
 class Google(BaseSite):
@@ -12,7 +14,7 @@ class Google(BaseSite):
     
     browser: Browser
 
-    async def ask_gemini(self, prompt: str, uploaded_files: list[str] = []):
+    async def ask_gemini(self, prompt: str) -> str:
         har_path = Path("./traces/google.har")
         if har_path.exists():
             har_path.unlink()
@@ -34,13 +36,22 @@ class Google(BaseSite):
                 
                 page_text = await page.evaluate("() => document.body.innerText")
                 matches = re.findall(r"AAnswer:(.*?)AEnd\.", page_text, re.DOTALL)
-                print(f"extracted Gemini answer: {"".join(match.strip() for match in matches) if matches else 'No match found'}")
                 response = matches[-1].strip() if matches else None
-                print(f"received response from Gemini: {response}")
-                    
         await self.stop()
         return response
-  
+    
+    async def ask_gemini_json(self, prompt: str, output_format: BaseModel):
+        response = json.loads(await self.ask_gemini(prompt))
+        if isinstance(response, list):
+            for i in range(len(response)):
+                try:
+                    response[i] = output_format(**response[i])
+                except:
+                    print(f"Failed to parse {response[i]} into {output_format}")
+        else:
+            print(f"Expected list, got: {response}")
+        return response 
+    
     #TODO: Eman 
     async def validate_job_link(link: str):
         #navigate to link, check if its the actual job description page with apply button
