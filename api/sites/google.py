@@ -34,7 +34,7 @@ class Google(BaseSite):
                 await page.press("Enter")
                 await asyncio.sleep(60)  # Wait for response to generate
                 
-                page_text = await page.evaluate("() => document.body.innerText")
+                page_text = await page.evaluate("() => document.body.textContent")
                 matches = re.findall(r"AAnswer:(.*?)AEnd\.", page_text, re.DOTALL)
                 response = matches[-1].strip() if matches else None
         await self.stop()
