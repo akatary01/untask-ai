@@ -43,4 +43,8 @@ class Google(BaseSite):
                     
         await self.stop()
         return response
-        
+  
+    #TODO: Eman 
+    async def validate_job_link(link: str):
+        #navigate to link, check if its the actual job description page with apply button
+        return
