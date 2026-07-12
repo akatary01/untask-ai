@@ -14,13 +14,12 @@ app = Celery(
     'conf',  # application name
     broker = 'redis://localhost:6379/0',
     backend = 'redis://localhost:6379/0',
-    include=['tasks']  # Auto-discover tasks from these modules
+    include=['orchestrator']  # auto-discover tasks from these modules
 )
 
 app.conf.beat_schedule = {
-    # Run every 1s
-    'test': {
-        'task': 'tasks.test',
-        'schedule': timedelta(seconds=1),  # Every 1 second
+    'orchestrator': {
+        'task': 'tasks.orchestrator',
+        'schedule': timedelta(hour=3),  # runs every 3 hour
     }
 }  
