@@ -30,16 +30,13 @@ class Google(BaseSite):
                 await box.fill(f"{prompt}. Please start your answer with 'AAnswer:' and end it with 'AEnd.'") 
                 
                 await page.press("Enter")
-                
                 await asyncio.sleep(60)  # Wait for response to generate
                 
                 page_text = await page.evaluate("() => document.body.innerText")
-                matches = re.search(r"AAnswer:(.*?)AEnd\.", page_text, re.DOTALL)
-                print(f"extracted Gemini answer: {"".join(match.strip() for match in matches.groups()) if matches else 'No match found'}")
-                response = matches.group(1).strip() if matches else None
+                matches = re.findall(r"AAnswer:(.*?)AEnd\.", page_text, re.DOTALL)
+                print(f"extracted Gemini answer: {"".join(match.strip() for match in matches) if matches else 'No match found'}")
+                response = matches[-1].strip() if matches else None
                 print(f"received response from Gemini: {response}")
-                # if len(divs) >= 3:
-                #     text = await divs[2].evaluate("() => this.innerText")
                     
         await self.stop()
         return response
