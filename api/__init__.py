@@ -9,9 +9,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from conf import config, secrets
 
 from sites.google import Google
+from tasks.job_finder import execute_job_finder
 
 api = FastAPI(root_path="/api")
-site = Google()
+
 api.add_middleware(
     CORSMiddleware,
     allow_origins=config.cors.allow_origins,
@@ -19,9 +20,9 @@ api.add_middleware(
     allow_headers=config.cors.allow_headers,
 )
 
-@api.post("/ask-gemini")
-async def ask_gemini(prompt: str) -> str:
-    return await site.ask_gemini(prompt) or "No response received from Gemini."
+@api.post("/find-job")
+async def ask_gemini(prompt: str):
+    return await execute_job_finder(Task(prompt=prompt))
 
 @api.post("/create-task")
 def create_task(prompt: str, frequency: int, start_at: datetime, task_type: TaskType):
