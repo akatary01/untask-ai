@@ -62,7 +62,7 @@ class Google(BaseSite):
                 return None
         
         except json.JSONDecodeError:
-            print(f"Failed to decode JSON. Raw content was: {response}")
+            print("Failed to decode JSON")
             return None
         except asyncio.TimeoutError:
             print(f"The request timed out locally after {timeout} seconds.")

@@ -1,7 +1,7 @@
 import requests
 from typing import List
 from schemas import Job
-
+from db.user import User
 from db.task import Task
 from tasks import load_prompt
 
@@ -23,7 +23,7 @@ async def execute_job_finder(task: Task, timeout: int = 30) -> List[Job]:
 def send_email(jobs: List[Job]):
     # Define the target endpoint matching your JS URL
     url = "https://akatary.com/api/mail/contact"
-    user = User.read() # TODO: @Eemzz
+    user = User.read() 
 
     params = {
         "name": user.name,       
