@@ -7,8 +7,8 @@ from tasks import load_prompt
 
 from vars import site_google
 
-async def execute_job_finder(task: Task, timeout: int = 30) -> List[Job]:
-    prompt = f"{task.prompt}. {load_prompt('job_finder')}"
+async def execute_job_finder(user_prompt: str, timeout: int = 30) -> List[Job]:
+    prompt = f"{user_prompt}. {load_prompt('job_finder')}"
     jobs = await site_google.ask_gemini_json(prompt, output_format=Job, timeout=timeout)
     if jobs:
         # for job in jobs:
@@ -34,8 +34,8 @@ def send_email(jobs: List[Job]):
         "fromEmail": "akatary23@gmail.com",
         "fromEmailConfirm": "akatary23@gmail.com",
         # Pass multiple emails as separate query parameters if needed
-        "reciepientEmails": ["akatary23@gmail.com"], 
-        "subject": f"Found {len(jobs)} Jobs"
+        "reciepientEmails": [user.email], 
+        "subject": "Found Jobs"
     }
     headers = {
         "Content-Type": "application/json"

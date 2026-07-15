@@ -16,7 +16,7 @@ class Google(BaseSite):
     
     browser: Browser
 
-    async def ask_gemini(self, prompt: str, timeout: int = 60) -> Optional[str]:
+    async def ask_gemini(self, prompt: str, timeout: int = 120) -> Optional[str]:
         har_path = Path("./traces/google.har")
         if har_path.exists():
             har_path.unlink()
@@ -45,7 +45,7 @@ class Google(BaseSite):
         await self.stop()
         return response
     
-    async def ask_gemini_json(self, prompt: str, output_format: type[T], timeout: int = 60) -> Optional[List[T]]:
+    async def ask_gemini_json(self, prompt: str, output_format: type[T], timeout: int = 120) -> Optional[List[T]]:
         try:
             response = await self.ask_gemini(prompt, timeout=timeout)
             
