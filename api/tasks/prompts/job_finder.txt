@@ -1,13 +1,13 @@
 FIND MAX 3 jobs.
 Answer with a json containing
 only listings actively accepting applicants. Format it to include the following: 
-company name, 
-job title, 
-link to job description, pulled directly from official company applicant tracking pipelines, ensuring no third-party job aggregators are included (if cannot be found exclude job), 
-job location, 
-work arrangement (remote, hybrid, onsite), 
-salary range, 
-brief description of job, 
-list of minimum requirements for job.
+company_name, 
+job_title, 
+link: url to job description, pulled directly from official company applicant tracking pipelines, ensuring no third-party job aggregators are included (if cannot be found exclude job), 
+job_location, 
+work_arrangement: remote, hybrid, onsite, 
+salary_range, 
+description, 
+min_requirements: list formatted as single string.
 Answer should not include anything else. 
 No follow-up questions. Just the JSON and nothing else.

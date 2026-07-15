@@ -6,8 +6,9 @@ from tasks import load_prompt
 
 from vars import site_google
 
-async def execute_job_finder(task: Task, timeout: int = 30) -> List[Job]:
+async def execute_job_finder(task: Task, timeout: int = 180) -> List[Job]:
     prompt = f"{task.prompt}. {load_prompt('job_finder')}"
+    print(prompt)
     jobs = await site_google.ask_gemini_json(prompt, output_format=Job, timeout=timeout)
     if jobs:
         for job in jobs:

@@ -16,7 +16,7 @@ class Google(BaseSite):
     
     browser: Browser
 
-    async def ask_gemini(self, prompt: str, timeout: int = 60) -> Optional[str]:
+    async def ask_gemini(self, prompt: str, timeout: int = 180) -> Optional[str]:
         har_path = Path("./traces/google.har")
         if har_path.exists():
             har_path.unlink()
@@ -43,18 +43,49 @@ class Google(BaseSite):
         await self.stop()
         return response
     
-    async def ask_gemini_json(self, prompt: str, output_format: type[T], timeout: int = 60) -> Optional[List[T]]:
-        response = await self.ask_gemini(prompt, timeout=timeout)
-        response = json.loads(response) if response else None
-        if isinstance(response, list):
-            for i in range(len(response)):
-                try:
-                    response[i] = output_format(**response[i])
-                except:
-                    print(f"Failed to parse {response[i]} into {output_format}")
-        else:
-            print(f"Expected list, got: {response}")
-        return response 
+    async def ask_gemini_json(self, prompt: str, output_format: type[T], timeout: int = 120) -> Optional[List[T]]:
+        try:
+            response = await self.ask_gemini(prompt, timeout=timeout)
+            print(f"gemini response: {type(response)}, content: '{response}'")
+
+            if(not response): #handling non response
+                print("Gemini returned empty string")
+                return None
+            if hasattr(response, "candidates") and response.candidates:
+                finish_reason = response.candidates[0].finish_reason
+                # Check if it was stopped by safety filters, recitation blocking, etc.
+                if finish_reason not in ["STOP", 1, None]:  
+                    print(f"Warning: Gemini stopped generating. Reason: {finish_reason}")
+        
+            if hasattr(response, "prompt_feedback") and getattr(response.prompt_feedback, "block_reason", None):
+                print(f"Prompt Blocked: {response.prompt_feedback.block_reason}")
+                return None      
+            
+            content_text = response.text if hasattr(response, "text") else str(response)
+            
+            if not content_text.strip():
+                print("Gemini returned successfully but the text content block was blank.")
+                return None
+
+            # 3. Proceed to Parse JSON safely
+            response_data = json.loads(content_text)
+        
+            if isinstance(response_data, list):
+                return [output_format(**item) for item in response_data]
+            else:
+                print(f"Expected list layout, but JSON parsed into a: {type(response_data)}")
+                return None
+        
+        except json.JSONDecodeError:
+            print(f"Failed to decode JSON. Raw content was: {content_text}")
+            return None
+        except asyncio.TimeoutError:
+            print(f"The request timed out locally after {timeout} seconds.")
+            return None
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+            return None
+        
     
     # #TODO: Eman 
     # async def validate_job_link(link: str):
